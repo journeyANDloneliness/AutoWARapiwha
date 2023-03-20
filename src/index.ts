@@ -102,7 +102,7 @@ app.post('/', async function(req, res) {
     let reaksi=false
     let repl=await new Promise(function(resolve){
       resolveJawabPesan= (msg, b,c)=>{
-        abaikan=b
+        abaikan=false
         reaksi=c 
         resolve(msg)
       }
