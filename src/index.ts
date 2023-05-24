@@ -85,7 +85,7 @@ let serverBerjalan=false
 
 let toResolve=[]
 let toResolve2=(a)=>{}
-let resolveJawabPesan=(a,b=false,c=false)=>{}
+let resolveJawabPesan={}
 let kirimkanPesanIntern=()=>{}
 export const jalankanServer=async ()=>{
   app.use(bodyParser.json());
@@ -101,11 +101,12 @@ app.post('/', async function(req, res) {
     let abaikan=false
     let reaksi=false
     let repl=await new Promise(function(resolve){
-      resolveJawabPesan= (msg, b,c)=>{
+      resolveJawabPesan[dataJson.contact.number]=(msg, b,c)=>{
         abaikan=false
         reaksi=c 
         resolve(msg)
       }
+			
       setTimeout(()=>{
         abaikan=true
         resolve({pesan:"waktu habis untuk memperoses pesan ini!"})
@@ -126,18 +127,18 @@ export const dapatkanPesan=async (nomer)=>{
     toResolve.push({resolve,nomer})
   })
 }
-export const jawabPesan = async(pesan, opsi)=>{
+export const jawabPesan = async(pesan, opsi,nomor)=>{
   //if(!serverBerjalan)await jalankanServer()
-  resolveJawabPesan({pesan,opsi})
+  resolveJawabPesan[nomor]?.({pesan,opsi})
 }
-export const reaksiPesan = async(pesan,opsi)=>{
+export const reaksiPesan = async(pesan,opsi, nomor)=>{
   //if(!serverBerjalan)await jalankanServer()
-  resolveJawabPesan({pesan,opsi},false,true)
+  resolveJawabPesan[nomor]?.({pesan,opsi},false,true)
 }
 
-export const abaikanPesan = async(pesan, opsi)=>{
+export const abaikanPesan = async(pesan, opsi, nomor)=>{
   //if(!serverBerjalan)await jalankanServer()
-  resolveJawabPesan({pesan, opsi}, true)
+  resolveJawabPesan[nomor]?.({pesan, opsi}, true)
 }
 
 export const kirimkanPesan= async (kepada,pesan, opsi)=>{
