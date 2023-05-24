@@ -86,7 +86,7 @@ const AutoWA2 = (toDo) => {
     });
 };
 let toResolve = [];
-let resolveJawabPesan = (a, b = false, c = false) => { };
+let resolveJawabPesan = {};
 const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(bodyParser.json());
     app.post('/', function (req, res) {
@@ -101,8 +101,8 @@ const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
             let abaikan = false;
             let reaksi = false;
             let repl = yield new Promise(function (resolve) {
-                resolveJawabPesan = (msg, b, c) => {
-                    abaikan = b;
+                resolveJawabPesan[dataJson.contact.number] = (msg, b, c) => {
+                    abaikan = false;
                     reaksi = c;
                     resolve(msg);
                 };
@@ -124,17 +124,20 @@ const dapatkanPesan = (nomer) => __awaiter(void 0, void 0, void 0, function* () 
         toResolve.push({ resolve, nomer });
     });
 });
-const jawabPesan = (pesan, opsi) => __awaiter(void 0, void 0, void 0, function* () {
+const jawabPesan = (pesan, opsi, nomor) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     //if(!serverBerjalan)await jalankanServer()
-    resolveJawabPesan({ pesan, opsi });
+    (_a = resolveJawabPesan[nomor]) === null || _a === void 0 ? void 0 : _a.call(resolveJawabPesan, { pesan, opsi });
 });
-const reaksiPesan = (pesan, opsi) => __awaiter(void 0, void 0, void 0, function* () {
+const reaksiPesan = (pesan, opsi, nomor) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     //if(!serverBerjalan)await jalankanServer()
-    resolveJawabPesan({ pesan, opsi }, false, true);
+    (_b = resolveJawabPesan[nomor]) === null || _b === void 0 ? void 0 : _b.call(resolveJawabPesan, { pesan, opsi }, false, true);
 });
-const abaikanPesan = (pesan, opsi) => __awaiter(void 0, void 0, void 0, function* () {
+const abaikanPesan = (pesan, opsi, nomor) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
     //if(!serverBerjalan)await jalankanServer()
-    resolveJawabPesan({ pesan, opsi }, true);
+    (_c = resolveJawabPesan[nomor]) === null || _c === void 0 ? void 0 : _c.call(resolveJawabPesan, { pesan, opsi }, true);
 });
 const kirimkanPesan = (kepada, pesan, opsi) => __awaiter(void 0, void 0, void 0, function* () {
     if (!socketBerjalan)
