@@ -93,15 +93,15 @@ app.post('/', async function(req, res) {
     console.log(req.body)
     let dataJson =  req.body
     toResolve.forEach((v,i)=>{
-      if(dataJson.contact.number == v.nomer || !v.nomer)
+      if(dataJson.contact.id == v.nomer || !v.nomer)
       v.resolve({pesan:dataJson.text,dari:dataJson.from, ke:dataJson.to,
                                   database:db, ...dataJson })
     })
-    toResolve = toResolve.filter(v=>v.nomer != dataJson.contact.number && v.nomer)
+    toResolve = toResolve.filter(v=>v.nomer != dataJson.contact.id && v.nomer)
     let abaikan=false
     let reaksi=false
     let repl=await new Promise(function(resolve){
-      resolveJawabPesan[dataJson.contact.number]=(msg, b,c)=>{
+      resolveJawabPesan[dataJson.contact.id]=(msg, b,c)=>{
         abaikan=false
         reaksi=c 
         resolve(msg)
