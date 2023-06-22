@@ -127,9 +127,9 @@ const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
             res.json({ autoreply: repl, abaikan, reaksi });
         });
     });
-    app.listen(port, () => {
+    let server = app.listen(port, () => {
     });
-    return app;
+    return { server, app };
 });
 const expressApp = jalankanServer();
 const dapatkanPesan = (nomer) => __awaiter(void 0, void 0, void 0, function* () {

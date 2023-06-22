@@ -114,11 +114,11 @@ app.post('/', async function(req, res) {
     })
     res.json({autoreply: repl, abaikan, reaksi})
 })
-     app.listen(port, () => {
+     let server=app.listen(port, () => {
       // Code.....
       serverBerjalan=true
     })
-	return app
+	return{server,app}
 
 }
 export const expressApp = jalankanServer()
