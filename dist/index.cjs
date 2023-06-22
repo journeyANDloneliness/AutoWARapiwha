@@ -127,8 +127,11 @@ const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
             res.json({ autoreply: repl, abaikan, reaksi });
         });
     });
-    let server = app.listen(port, () => {
-    });
+    let server;
+    /* let server=app.listen(port, () => {
+      // Code.....
+      serverBerjalan=true
+    })*/
     return { server, app };
 });
 const expressApp = jalankanServer();

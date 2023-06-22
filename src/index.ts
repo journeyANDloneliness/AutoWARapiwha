@@ -114,10 +114,12 @@ app.post('/', async function(req, res) {
     })
     res.json({autoreply: repl, abaikan, reaksi})
 })
-     let server=app.listen(port, () => {
+		let server
+    /* let server=app.listen(port, () => {
       // Code.....
       serverBerjalan=true
-    })
+    })*/
+
 	return{server,app}
 
 }
