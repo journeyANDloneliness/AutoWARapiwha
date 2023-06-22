@@ -114,13 +114,14 @@ app.post('/', async function(req, res) {
     })
     res.json({autoreply: repl, abaikan, reaksi})
 })
-    return app.listen(port, () => {
+     app.listen(port, () => {
       // Code.....
       serverBerjalan=true
     })
+	return app
 
 }
-jalankanServer()
+export const expressApp = jalankanServer()
 export const dapatkanPesan=async (nomer)=>{
   //if(!serverBerjalan) await jalankanServer()
   return new Promise((resolve)=>{

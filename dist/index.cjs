@@ -107,14 +107,14 @@ const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
             console.log(req.body);
             let dataJson = req.body;
             toResolve.forEach((v, i) => {
-                if (dataJson.contact.number == v.nomer || !v.nomer)
+                if (dataJson.contact.id == v.nomer || !v.nomer)
                     v.resolve(Object.assign({ pesan: dataJson.text, dari: dataJson.from, ke: dataJson.to, database: db }, dataJson));
             });
-            toResolve = toResolve.filter(v => v.nomer != dataJson.contact.number && v.nomer);
+            toResolve = toResolve.filter(v => v.nomer != dataJson.contact.id && v.nomer);
             let abaikan = false;
             let reaksi = false;
             let repl = yield new Promise(function (resolve) {
-                resolveJawabPesan[dataJson.contact.number] = (msg, b, c) => {
+                resolveJawabPesan[dataJson.contact.id] = (msg, b, c) => {
                     abaikan = false;
                     reaksi = c;
                     resolve(msg);
@@ -127,10 +127,11 @@ const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
             res.json({ autoreply: repl, abaikan, reaksi });
         });
     });
-    return app.listen(port, () => {
+    app.listen(port, () => {
     });
+    return app;
 });
-jalankanServer();
+const expressApp = jalankanServer();
 const dapatkanPesan = (nomer) => __awaiter(void 0, void 0, void 0, function* () {
     //if(!serverBerjalan) await jalankanServer()
     return new Promise((resolve) => {
@@ -163,6 +164,7 @@ exports.AutoWA2 = AutoWA2;
 exports.abaikanPesan = abaikanPesan;
 exports.dapatkanPesan = dapatkanPesan;
 exports["default"] = index;
+exports.expressApp = expressApp;
 exports.jalankanServer = jalankanServer;
 exports.jawabPesan = jawabPesan;
 exports.kirimkanPesan = kirimkanPesan;
