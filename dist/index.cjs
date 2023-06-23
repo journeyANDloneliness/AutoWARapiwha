@@ -5,8 +5,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const WebSocket = require('ws');
-const http = require('http');
 const Database = require('@replit/database');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -14,8 +12,6 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 const express__default = /*#__PURE__*/_interopDefaultLegacy(express);
 const bodyParser__default = /*#__PURE__*/_interopDefaultLegacy(bodyParser);
 const cors__default = /*#__PURE__*/_interopDefaultLegacy(cors);
-const WebSocket__default = /*#__PURE__*/_interopDefaultLegacy(WebSocket);
-const http__default = /*#__PURE__*/_interopDefaultLegacy(http);
 const Database__default = /*#__PURE__*/_interopDefaultLegacy(Database);
 
 /*! *****************************************************************************
@@ -44,60 +40,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
 }
 
 const app = express__default["default"]();
-let ws = null;
-let socketBerjalan = false;
-const runSocket = () => __awaiter(void 0, void 0, void 0, function* () {
-    const server = http__default["default"].createServer(app);
-    const wss = new WebSocket__default["default"].Server({ server });
-    socketBerjalan = true;
-    yield wss.on('connection', (w) => {
-        console.log('Client connected');
-        ws = w;
-        w.send('anda terhubung dengan server!'); // send a message to the client
-    });
-});
 app.use(cors__default["default"]());
-const port = 3000;
 const db = new Database__default["default"]();
-//app.use(bodyParser.text());
-const index = (toDo) => {
-    app.post('/', function (req, res) {
-        let data = '';
-        req.on('data', (chunk) => {
-            data += chunk;
-        });
-        req.on('end', () => __awaiter(this, void 0, void 0, function* () {
-            var decodedData = decodeURIComponent(data.replaceAll("+", " "));
-            let dataJson = JSON.parse(decodedData.slice(5));
-            console.log(dataJson);
-            if (dataJson.event === "INBOX") {
-                let response = { autoreply: "" };
-                response.autoreply = toDo({ pesan: dataJson.text, dari: dataJson.from, ke: dataJson.to,
-                    database: db });
-                res.json(response);
-            }
-        }));
-    });
-    app.listen(port, () => {
-        // Code.....
-    });
-};
-const AutoWA2 = (toDo) => {
-    app.use(bodyParser__default["default"].json());
-    app.post('/', function (req, res) {
-        console.log(req.body);
-        let dataJson = req.body;
-        if (dataJson.event === "INBOX") {
-            let response = { autoreply: { pesan: "" } };
-            response.autoreply.pesan = toDo({ pesan: dataJson.text, dari: dataJson.from, ke: dataJson.to,
-                database: db });
-            res.json(response);
-        }
-    });
-    app.listen(port, () => {
-        // Code.....
-    });
-};
 let toResolve = [];
 let resolveJawabPesan = {};
 const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -163,13 +107,10 @@ const kirimkanPesan = (kepada, pesan, opsi) => __awaiter(void 0, void 0, void 0,
     ws.send(msg);
 });
 
-exports.AutoWA2 = AutoWA2;
 exports.abaikanPesan = abaikanPesan;
 exports.dapatkanPesan = dapatkanPesan;
-exports["default"] = index;
 exports.expressApp = expressApp;
 exports.jalankanServer = jalankanServer;
 exports.jawabPesan = jawabPesan;
 exports.kirimkanPesan = kirimkanPesan;
 exports.reaksiPesan = reaksiPesan;
-exports.runSocket = runSocket;

@@ -1,8 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import WebSocket from 'ws';
-import http from 'http';
 import Database from '@replit/database';
 
 /*! *****************************************************************************
@@ -31,60 +29,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
 }
 
 const app = express();
-let ws = null;
-let socketBerjalan = false;
-const runSocket = () => __awaiter(void 0, void 0, void 0, function* () {
-    const server = http.createServer(app);
-    const wss = new WebSocket.Server({ server });
-    socketBerjalan = true;
-    yield wss.on('connection', (w) => {
-        console.log('Client connected');
-        ws = w;
-        w.send('anda terhubung dengan server!'); // send a message to the client
-    });
-});
 app.use(cors());
-const port = 3000;
 const db = new Database();
-//app.use(bodyParser.text());
-const index = (toDo) => {
-    app.post('/', function (req, res) {
-        let data = '';
-        req.on('data', (chunk) => {
-            data += chunk;
-        });
-        req.on('end', () => __awaiter(this, void 0, void 0, function* () {
-            var decodedData = decodeURIComponent(data.replaceAll("+", " "));
-            let dataJson = JSON.parse(decodedData.slice(5));
-            console.log(dataJson);
-            if (dataJson.event === "INBOX") {
-                let response = { autoreply: "" };
-                response.autoreply = toDo({ pesan: dataJson.text, dari: dataJson.from, ke: dataJson.to,
-                    database: db });
-                res.json(response);
-            }
-        }));
-    });
-    app.listen(port, () => {
-        // Code.....
-    });
-};
-const AutoWA2 = (toDo) => {
-    app.use(bodyParser.json());
-    app.post('/', function (req, res) {
-        console.log(req.body);
-        let dataJson = req.body;
-        if (dataJson.event === "INBOX") {
-            let response = { autoreply: { pesan: "" } };
-            response.autoreply.pesan = toDo({ pesan: dataJson.text, dari: dataJson.from, ke: dataJson.to,
-                database: db });
-            res.json(response);
-        }
-    });
-    app.listen(port, () => {
-        // Code.....
-    });
-};
 let toResolve = [];
 let resolveJawabPesan = {};
 const jalankanServer = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -150,4 +96,4 @@ const kirimkanPesan = (kepada, pesan, opsi) => __awaiter(void 0, void 0, void 0,
     ws.send(msg);
 });
 
-export { AutoWA2, abaikanPesan, dapatkanPesan, index as default, expressApp, jalankanServer, jawabPesan, kirimkanPesan, reaksiPesan, runSocket };
+export { abaikanPesan, dapatkanPesan, expressApp, jalankanServer, jawabPesan, kirimkanPesan, reaksiPesan };
